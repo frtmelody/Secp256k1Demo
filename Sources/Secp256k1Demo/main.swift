@@ -1,6 +1,5 @@
 import Foundation
 import CryptoSwift
-import SwiftKeccak
 import K1
 
 
@@ -27,9 +26,8 @@ let p = try K1.PrivateKey.import(rawRepresentation: privateKey)
 print("公钥Hex", try p.publicKey.rawRepresentation(format: .uncompressed).toHexString())
 print("公钥Base64", try p.publicKey.rawRepresentation(format: .uncompressed).toBase64())
 
-let message = keccak256("hello")
-
-print("代签名消息hash", message.toHexString())
+let message = SHA3(variant: .keccak256).calculate(for: "hello".bytes)
+print("待签名消息hash", message.toHexString())
 
 let signature = try p.ecdsaSign(hashed: message)
 
